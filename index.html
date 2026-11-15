@@ -80,6 +80,14 @@
   .card .go{font-weight:700;color:var(--cc)}
   .empty{color:var(--muted);font-size:15px;padding:22px;border:2px dashed var(--line);border-radius:20px;text-align:center;background:#fff}
 
+  .grades{display:flex;gap:8px;flex-wrap:wrap;margin:-4px 0 6px}
+  .grades button{font:inherit;font-size:14px;font-weight:700;border:2px solid var(--c1s);background:#fff;color:var(--c1);
+    border-radius:12px;padding:5px 14px;cursor:pointer;transition:.15s}
+  .grades button.on{background:var(--c1);border-color:var(--c1);color:#fff}
+  .grade-head{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:800;margin:22px 0 12px;
+    padding-left:12px;border-left:5px solid var(--c1)}
+  .grade-head span{font-size:13px;font-weight:700;color:var(--c1);background:var(--c1s);padding:1px 9px;border-radius:999px}
+
   footer{margin-top:64px;padding:32px 0 48px;text-align:center;color:var(--muted);font-size:14px}
   footer .heart{color:#ff6b6b}
 </style>
@@ -124,10 +132,21 @@
    date     : 날짜 (예: "2026-11")
    link     : 자료 주소 (구글드라이브, 유튜브 등). 없으면 ""
    emoji    : (선택) 카드에 띄울 이모지. 없으면 카테고리 기본 이모지
+   grade    : (수업자료만) "1학년" / "2학년" / "3학년" 중 하나
    ========================================================= */
 const items = [
   {
     category: "수업자료",
+    grade: "1학년",
+    title: "7단원. 태양계",
+    desc: "1학년 7단원 태양계 수업자료를 모아 두는 곳이에요.",
+    date: "2026-11",
+    link: "",
+    emoji: "🪐"
+  },
+  {
+    category: "수업자료",
+    grade: "3학년",
     title: "예시) 운동과 에너지 활동지",
     desc: "자료를 올리면 이 예시 카드를 지우거나 바꿔 주세요.",
     date: "2026-11",
@@ -160,6 +179,8 @@ const cats = [
   {name:"기타",     icon:"🎒", color:"var(--c4)", soft:"var(--c4s)"},
 ];
 let current = "전체";
+const grades = ["1학년","2학년","3학년"];
+let currentGrade = "전체";
 const tabs = document.getElementById("tabs"), q = document.getElementById("q"), main = document.getElementById("main");
 
 document.getElementById("stats").innerHTML = cats.slice(0,3).map(c=>
@@ -187,6 +208,35 @@ function render(){
     const sec = document.createElement("section");
     sec.innerHTML = `<div class="sec-head"><span class="sec-icon" style="background:${c.soft}">${c.icon}</span>
       <h2>${c.name}</h2><span class="count" style="background:${c.soft};color:${c.color}">${list.length}개</span></div>`;
+    if(c.name==="수업자료"){
+      const bar = document.createElement("div"); bar.className="grades";
+      ["전체", ...grades].forEach(g=>{
+        const b = document.createElement("button"); b.textContent = g;
+        if(g===currentGrade) b.className="on";
+        b.onclick = ()=>{ currentGrade=g; render(); };
+        bar.appendChild(b);
+      });
+      sec.appendChild(bar);
+      grades.filter(g=>currentGrade==="전체"||currentGrade===g).forEach(g=>{
+        const sub = list.filter(i=>i.grade===g);
+        const h = document.createElement("h3"); h.className="grade-head";
+        h.innerHTML = `${g} <span>${sub.length}개</span>`;
+        sec.appendChild(h);
+        sec.appendChild(makeGrid(sub, c));
+      });
+      const etc = list.filter(i=>!grades.includes(i.grade));
+      if(etc.length && currentGrade==="전체"){
+        const h = document.createElement("h3"); h.className="grade-head"; h.innerHTML=`학년 미지정 <span>${etc.length}개</span>`;
+        sec.appendChild(h); sec.appendChild(makeGrid(etc, c));
+      }
+      main.appendChild(sec);
+      return;
+    }
+    sec.appendChild(makeGrid(list, c)); main.appendChild(sec);
+  });
+}
+
+function makeGrid(list, c){
     const grid = document.createElement("div"); grid.className="grid";
     if(!list.length) grid.innerHTML = `<div class="empty">아직 자료가 없어요. 곧 채워질 거예요 ✨</div>`;
     list.forEach(i=>{
@@ -198,8 +248,7 @@ function render(){
         <div class="meta"><span>${esc(i.date)}</span>${i.link?`<span class="go">열기 →</span>`:""}</div>`;
       grid.appendChild(el);
     });
-    sec.appendChild(grid); main.appendChild(sec);
-  });
+    return grid;
 }
 document.getElementById("yr").textContent = new Date().getFullYear();
 render();
