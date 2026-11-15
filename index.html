@@ -80,6 +80,12 @@
   .card .go{font-weight:700;color:var(--cc)}
   .empty{color:var(--muted);font-size:15px;padding:22px;border:2px dashed var(--line);border-radius:20px;text-align:center;background:#fff}
 
+  .subs{list-style:none;display:flex;flex-direction:column;gap:6px;margin:4px 0 2px}
+  .subs a{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;background:var(--c1s);
+    font-size:14px;font-weight:700;color:var(--ink);transition:.15s}
+  .subs a b{margin-left:auto;color:var(--cc)}
+  .subs a:hover{background:var(--cc);color:#fff}
+  .subs a:hover b{color:#fff}
   .grades{display:flex;gap:8px;flex-wrap:wrap;margin:-4px 0 6px}
   .grades button{font:inherit;font-size:14px;font-weight:700;border:2px solid var(--c1s);background:#fff;color:var(--c1);
     border-radius:12px;padding:5px 14px;cursor:pointer;transition:.15s}
@@ -142,16 +148,10 @@ const items = [
     desc: "1학년 7단원 태양계 수업자료를 모아 두는 곳이에요.",
     date: "2026-11",
     link: "",
-    emoji: "🪐"
-  },
-  {
-    category: "수업자료",
-    grade: "1학년",
-    title: "7단원 태양계 · 달의 위상 변화 시뮬레이터",
-    desc: "달을 끌어 지구 둘레를 돌려 보며 달 모양이 바뀌는 까닭을 관찰해요.",
-    date: "2026-11",
-    link: "moon-phase.html",
-    emoji: "🌓"
+    emoji: "🪐",
+    children: [
+      { title: "달의 위상 변화 시뮬레이터", link: "moon-phase.html", emoji: "🌓" },
+    ]
   },
   {
     category: "수업자료",
@@ -211,7 +211,7 @@ function render(){
   main.innerHTML = "";
   cats.filter(c=>current==="전체"||current===c.name).forEach(c=>{
     const list = items.filter(i=>i.category===c.name &&
-      (!term || (i.title+" "+i.desc).toLowerCase().includes(term)))
+      (!term || (i.title+" "+i.desc+" "+(i.children||[]).map(s=>s.title).join(" ")).toLowerCase().includes(term)))
       .sort((a,b)=>String(b.date).localeCompare(String(a.date)));
     if(current==="전체" && c.name==="기타" && !list.length) return;
     const sec = document.createElement("section");
@@ -254,6 +254,7 @@ function makeGrid(list, c){
       if(i.link){ el.href=i.link; el.target="_blank"; el.rel="noopener"; }
       el.innerHTML = `<span class="emoji">${esc(i.emoji||c.icon)}</span>
         <h3>${esc(i.title)}</h3>${i.desc?`<p>${esc(i.desc)}</p>`:""}
+        ${(i.children&&i.children.length)?`<ul class="subs">${i.children.map(s=>`<li><a href="${esc(s.link)}" target="_blank" rel="noopener" style="--cc:${c.color}"><span>${esc(s.emoji||"📎")}</span>${esc(s.title)}<b>→</b></a></li>`).join("")}</ul>`:""}
         <div class="meta"><span>${esc(i.date)}</span>${i.link?`<span class="go">열기 →</span>`:""}</div>`;
       grid.appendChild(el);
     });
