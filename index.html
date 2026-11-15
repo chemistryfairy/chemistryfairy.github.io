@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>슬기로운 지선티의 학교생활 아카이빙</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root{
+    --bg:#faf8f3; --card:#ffffff; --ink:#2b2a28; --muted:#7a766e; --line:#e9e4d9;
+    --c1:#3f7d6e; --c1s:#e3f0ec;   /* 수업자료 */
+    --c2:#c0623b; --c2s:#f8e7df;   /* 수업영상 */
+    --c3:#4a6fa5; --c3s:#e4ebf5;   /* 학급운영 */
+    --c4:#8a6bb0; --c4s:#eee7f5;   /* 기타 */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+       background:var(--bg);color:var(--ink);line-height:1.6}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+
+  header{padding:64px 0 36px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-size:14px;color:var(--muted);letter-spacing:.04em}
+  h1{font-size:clamp(28px,5vw,42px);font-weight:800;letter-spacing:-.02em;margin:6px 0 10px}
+  h1 span{color:var(--c1)}
+  .intro{color:var(--muted);max-width:620px}
+
+  nav{position:sticky;top:0;background:rgba(250,248,243,.92);backdrop-filter:blur(6px);
+      border-bottom:1px solid var(--line);z-index:5}
+  nav .wrap{display:flex;gap:8px;padding:12px 20px;overflow-x:auto}
+  nav button{font:inherit;font-size:15px;border:1px solid var(--line);background:#fff;
+      border-radius:999px;padding:6px 16px;cursor:pointer;white-space:nowrap;color:var(--ink)}
+  nav button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .search{margin-left:auto;min-width:180px;font:inherit;font-size:15px;border:1px solid var(--line);
+      border-radius:999px;padding:6px 14px;background:#fff}
+
+  section{padding:40px 0 8px}
+  .sec-head{display:flex;align-items:baseline;gap:10px;margin-bottom:16px}
+  .sec-head h2{font-size:22px;font-weight:700}
+  .sec-head .count{font-size:14px;color:var(--muted)}
+  .sec-head .dot{width:10px;height:10px;border-radius:50%;display:inline-block;transform:translateY(-2px)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;
+      display:flex;flex-direction:column;gap:8px;transition:transform .15s,box-shadow .15s}
+  a.card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.06)}
+  .tag{align-self:flex-start;font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px}
+  .card h3{font-size:17px;font-weight:700;line-height:1.4}
+  .card p{font-size:14px;color:var(--muted)}
+  .card .meta{margin-top:auto;font-size:13px;color:var(--muted)}
+  .empty{color:var(--muted);font-size:14px;padding:18px;border:1px dashed var(--line);border-radius:14px}
+
+  footer{margin-top:56px;padding:28px 0 48px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">CLASSROOM ARCHIVE</div>
+    <h1>슬기로운 <span>지선티</span>의 학교생활 아카이빙</h1>
+    <p class="intro">수업자료, 수업영상, 학급운영 기록을 차곡차곡 모아 두는 곳입니다.</p>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap" id="tabs">
+    <input class="search" id="q" type="search" placeholder="검색">
+  </div>
+</nav>
+
+<main class="wrap" id="main"></main>
+
+<footer>
+  <div class="wrap">© <span id="yr"></span> 슬기로운 지선티의 학교생활 아카이빙</div>
+</footer>
+
+<script>
+/* =========================================================
+   ✏️ 여기만 고치면 됩니다!
+   ---------------------------------------------------------
+   자료를 추가하려면 아래 items 목록에 { ... }, 한 덩어리를 복사해서 붙여 넣고
+   내용을 바꾸세요. (각 덩어리 끝의 쉼표 , 를 꼭 남겨 두세요)
+
+   category : "수업자료" / "수업영상" / "학급운영" / "기타" 중 하나
+   title    : 제목
+   desc     : 한 줄 설명 (없으면 "" 로 비워 두기)
+   date     : 날짜 (예: "2026-11")
+   link     : 자료 주소 (구글드라이브, 유튜브 등). 없으면 ""
+   ========================================================= */
+const items = [
+  {
+    category: "수업자료",
+    title: "예시) 운동과 에너지 활동지",
+    desc: "자료를 올리면 이 예시 카드를 지우거나 바꿔 주세요.",
+    date: "2026-11",
+    link: ""
+  },
+  {
+    category: "수업영상",
+    title: "예시) 실험 시연 영상",
+    desc: "유튜브 링크를 link 칸에 넣으면 카드를 눌렀을 때 바로 열려요.",
+    date: "2026-11",
+    link: ""
+  },
+  {
+    category: "학급운영",
+    title: "예시) 학급 규칙 & 1인 1역",
+    desc: "학급운영 기록을 모아 보세요.",
+    date: "2026-11",
+    link: ""
+  },
+];
+
+/* ---------- 아래는 건드리지 않아도 됩니다 ---------- */
+const cats = [
+  {name:"수업자료", color:"var(--c1)", soft:"var(--c1s)"},
+  {name:"수업영상", color:"var(--c2)", soft:"var(--c2s)"},
+  {name:"학급운영", color:"var(--c3)", soft:"var(--c3s)"},
+  {name:"기타",     color:"var(--c4)", soft:"var(--c4s)"},
+];
+let current = "전체";
+const tabs = document.getElementById("tabs"), q = document.getElementById("q"), main = document.getElementById("main");
+
+["전체", ...cats.map(c=>c.name)].forEach(n=>{
+  const b = document.createElement("button");
+  b.textContent = n; if(n===current) b.className="on";
+  b.onclick = ()=>{ current=n; [...tabs.querySelectorAll("button")].forEach(x=>x.classList.toggle("on",x===b)); render(); };
+  tabs.insertBefore(b, q);
+});
+q.addEventListener("input", render);
+
+function esc(s){return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+
+function render(){
+  const term = q.value.trim().toLowerCase();
+  main.innerHTML = "";
+  cats.filter(c=>current==="전체"||current===c.name).forEach(c=>{
+    const list = items.filter(i=>i.category===c.name &&
+      (!term || (i.title+" "+i.desc).toLowerCase().includes(term)))
+      .sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+    if(current==="전체" && c.name==="기타" && !list.length) return;
+    const sec = document.createElement("section");
+    sec.innerHTML = `<div class="sec-head"><span class="dot" style="background:${c.color}"></span>
+      <h2>${c.name}</h2><span class="count">${list.length}개</span></div>`;
+    const grid = document.createElement("div"); grid.className="grid";
+    if(!list.length) grid.innerHTML = `<div class="empty">아직 자료가 없어요.</div>`;
+    list.forEach(i=>{
+      const el = document.createElement(i.link ? "a" : "div");
+      el.className = "card";
+      if(i.link){ el.href=i.link; el.target="_blank"; el.rel="noopener"; }
+      el.innerHTML = `<span class="tag" style="background:${c.soft};color:${c.color}">${c.name}</span>
+        <h3>${esc(i.title)}</h3>${i.desc?`<p>${esc(i.desc)}</p>`:""}
+        <div class="meta">${esc(i.date)}${i.link?" · 열기 ↗":""}</div>`;
+      grid.appendChild(el);
+    });
+    sec.appendChild(grid); main.appendChild(sec);
+  });
+}
+document.getElementById("yr").textContent = new Date().getFullYear();
+render();
+</script>
+</body>
+</html>
